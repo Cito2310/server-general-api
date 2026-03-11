@@ -6,12 +6,7 @@ import { incrementVersion } from "../../version/incrementVersion";
 export const updateUser = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const { name, password, role, isActive } = req.body;
-
-        const updates: Record<string, any> = {};
-        if (name !== undefined) updates.name = name;
-        if (role !== undefined) updates.role = role;
-        if (isActive !== undefined) updates.isActive = isActive;
+        const { _id, __v, password, ...updates } = req.body;
         if (password !== undefined) updates.password = await bcrypt.hash(password, 10);
 
         const user = await MMUser.findByIdAndUpdate(id, updates, { new: true }).select("-password");
