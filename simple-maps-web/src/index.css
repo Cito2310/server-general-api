@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+    --font-sans: 'Montserrat', sans-serif;
+}
+
+* {
+    font-family: var(--font-sans);
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #fafafa;
+    color: #171717;
+}
