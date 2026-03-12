@@ -4,6 +4,7 @@ import versionRouter from "./version/version.routes";
 import userRouter from "./users/mmUser.routes";
 import categoryRouter from "./category/category.routes";
 import imageRouter from "./image/image.routes";
+import productRouter from "./product/product.routes";
 
 const router = Router();
 
@@ -12,5 +13,6 @@ router.use("/version", versionRouter);
 router.use("/users", userRouter);
 router.use("/categories", categoryRouter);
 router.use("/images", imageRouter);
+router.use("/products", productRouter);
 
 export default router;
