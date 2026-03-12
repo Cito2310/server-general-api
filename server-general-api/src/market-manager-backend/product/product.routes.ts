@@ -4,14 +4,14 @@ import { handleValidation } from "../../middlewares/handleValidation";
 import { authMMJWT } from "../middlewares/authMMJWT";
 import { requireRole } from "../middlewares/requireRole";
 import { sanitizeString } from "../middlewares/sanitizeString";
-import { getProducts, getProduct, createProduct, updateProduct, deleteProduct } from "./controllers";
+import { getProducts, getProduct, createProduct, updateProduct, updateProductStock, updateProductExpiration, deleteProduct } from "./controllers";
 
 const router = Router();
 
 const SIZE_TYPES = ["kg", "g", "oz", "cm3", "l", "ml", "u", "cc"];
 const UNIT_TYPES = ["unit", "weight"];
 
-router.get("/", authMMJWT, getProducts);
+router.get("/", getProducts);
 router.get("/:id", authMMJWT, getProduct);
 
 router.post(
@@ -87,6 +87,27 @@ router.put(
     ],
     handleValidation,
     updateProduct
+);
+
+router.put(
+    "/:id/stock",
+    authMMJWT,
+    [
+        body("newStock").optional().isNumeric().withMessage("newStock must be a number").isFloat({ min: 0 }).withMessage("newStock must be 0 or greater"),
+        body("subtractStock").optional().isNumeric().withMessage("subtractStock must be a number").isFloat({ min: 0 }).withMessage("subtractStock must be 0 or greater"),
+    ],
+    handleValidation,
+    updateProductStock
+);
+
+router.put(
+    "/:id/expiration",
+    authMMJWT,
+    [
+        body("subtractQuantity").notEmpty().withMessage("subtractQuantity is required").isNumeric().withMessage("subtractQuantity must be a number").isFloat({ min: 0 }).withMessage("subtractQuantity must be 0 or greater"),
+    ],
+    handleValidation,
+    updateProductExpiration
 );
 
 router.delete("/:id", authMMJWT, requireRole("admin", "encargado"), deleteProduct);

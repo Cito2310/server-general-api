@@ -90,3 +90,40 @@
     updatedAt: Date                     // auto (timestamps)
 }
 ```
+
+---
+
+## DailySummary
+
+```ts
+{
+    date: string                        // formato "2026-03-10" — único por día
+    totalTickets: number
+    totalAmount: number
+    methodPayment: Map<string, number>  // objeto flexible: { cash: 100, debit: 50, qr: 30, ... }
+
+    morning: {                          // turno mañana
+        totalTickets: number
+        totalAmount: number
+        methodPayment: Map<string, number>
+    }
+
+    night: {                            // turno tarde/noche
+        totalTickets: number
+        totalAmount: number
+        methodPayment: Map<string, number>
+    }
+
+    products: [
+        {
+            productId: ObjectId         // referencia a Product._id
+            name: string
+            quantitySold: number
+            totalAmount: number
+        }
+    ]
+
+    createdAt: Date                     // auto (timestamps)
+    updatedAt: Date                     // auto (timestamps)
+}
+```
