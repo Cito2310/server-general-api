@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Category } from "../category.model";
 import { incrementVersion } from "../../version/incrementVersion";
+import { isMongoError } from "../../shared/isMongoError";
 
 export const createCategory = async (req: Request, res: Response) => {
     try {
@@ -10,8 +11,8 @@ export const createCategory = async (req: Request, res: Response) => {
         await incrementVersion("categoryVersion");
 
         res.status(201).json(category);
-    } catch (error: any) {
-        if (error.code === 11000) {
+    } catch (error: unknown) {
+        if (isMongoError(error) && error.code === 11000) {
             res.status(409).json({ message: "Category name already exists" });
             return;
         }

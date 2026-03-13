@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { MMUser } from "../mmUser.model";
 import { incrementVersion } from "../../version/incrementVersion";
+import { auditLog } from "../../shared/auditLog";
 
 export const deleteUser = async (req: Request, res: Response) => {
     try {
@@ -14,6 +15,7 @@ export const deleteUser = async (req: Request, res: Response) => {
 
         await incrementVersion("userVersion");
 
+        auditLog("DELETE", "user", id, req.user?.name ?? "unknown");
         res.json(user);
     } catch (error) {
         res.status(500).json({ message: "Internal server error" });

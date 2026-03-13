@@ -13,7 +13,7 @@ router.post(
     "/",
     authMMJWT,
     [
-        sanitizeString("date").notEmpty().withMessage("date is required").matches(/^\d{4}-\d{2}-\d{2}$/).withMessage("date must be in format YYYY-MM-DD"),
+        sanitizeString("date").notEmpty().withMessage("date is required").isISO8601({ strict: true }).withMessage("date must be a valid date in format YYYY-MM-DD"),
 
         body("totalTickets").notEmpty().withMessage("totalTickets is required").isNumeric().withMessage("totalTickets must be a number").isFloat({ min: 0 }).withMessage("totalTickets must be 0 or greater"),
         body("totalAmount").notEmpty().withMessage("totalAmount is required").isNumeric().withMessage("totalAmount must be a number").isFloat({ min: 0 }).withMessage("totalAmount must be 0 or greater"),
