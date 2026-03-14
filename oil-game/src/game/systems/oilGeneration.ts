@@ -94,6 +94,7 @@ export const generateOilBags = (grid: GameGrid): { oilBags: OilBag[] } => {
             polygon,
             totalOil,
             remainingOil: totalOil,
+            extracting: false,
         })
     }
 

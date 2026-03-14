@@ -60,6 +60,35 @@ export const chainEdges = (edges: [Point, Point][]): Point[] => {
     return polygon
 }
 
+export const segmentsIntersect = (p1: Point, q1: Point, p2: Point, q2: Point): boolean => {
+    const orient = (o: Point, a: Point, b: Point) =>
+        (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x)
+
+    const d1 = orient(p2, q2, p1)
+    const d2 = orient(p2, q2, q1)
+    const d3 = orient(p1, q1, p2)
+    const d4 = orient(p1, q1, q2)
+
+    return (
+        ((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
+        ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))
+    )
+}
+
+export const triangleIntersectsSegment = (
+    vertices: [Point, Point, Point],
+    p1: Point,
+    p2: Point,
+): boolean => {
+    const [a, b, c] = vertices
+    if (isPointInTriangle(p1, a, b, c)) return true
+    if (isPointInTriangle(p2, a, b, c)) return true
+    if (segmentsIntersect(p1, p2, a, b)) return true
+    if (segmentsIntersect(p1, p2, b, c)) return true
+    if (segmentsIntersect(p1, p2, c, a)) return true
+    return false
+}
+
 export const isPointInTriangle = (p: Point, a: Point, b: Point, c: Point): boolean => {
     const d1 = (p.x - b.x) * (a.y - b.y) - (a.x - b.x) * (p.y - b.y)
     const d2 = (p.x - c.x) * (b.y - c.y) - (b.x - c.x) * (p.y - c.y)
@@ -67,6 +96,18 @@ export const isPointInTriangle = (p: Point, a: Point, b: Point, c: Point): boole
     const hasNeg = d1 < 0 || d2 < 0 || d3 < 0
     const hasPos = d1 > 0 || d2 > 0 || d3 > 0
     return !(hasNeg && hasPos)
+}
+
+export const isPointInPolygon = (point: Point, polygon: Point[]): boolean => {
+    const { x, y } = point
+    let inside = false
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i].x, yi = polygon[i].y
+        const xj = polygon[j].x, yj = polygon[j].y
+        const intersect = (yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi
+        if (intersect) inside = !inside
+    }
+    return inside
 }
 
 export const isConvexPolygon = (polygon: Point[]): boolean => {

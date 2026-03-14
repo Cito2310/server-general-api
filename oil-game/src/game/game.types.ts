@@ -18,6 +18,18 @@ export interface OilBag {
     polygon: Point[]
     totalOil: number
     remainingOil: number
+    extracting: boolean
+}
+
+export interface Derrick {
+    id: number
+    x: number
+}
+
+export interface Pipe {
+    id: number
+    from: Point
+    to: Point
 }
 
 export interface GameGrid {
@@ -27,3 +39,5 @@ export interface GameGrid {
     height: number
     surfaceBoundaryY: number
 }
+
+export type GameMode = 'dig' | 'place-derrick' | 'place-pipe' | null
