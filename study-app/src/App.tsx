@@ -1,15 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { MateriasPage } from './materias/MateriasPage';
-import { UnidadesPage } from './unidades/UnidadesPage';
-import { TemasPage } from './temas/TemasPage';
+import { SubjectsPage } from './subjects/SubjectsPage';
+import { UnitsPage } from './units/UnitsPage';
+import { TopicsPage } from './topics/TopicsPage';
 
 const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<MateriasPage />} />
-                <Route path="/materias/:materiaId" element={<UnidadesPage />} />
-                <Route path="/unidades/:unidadId" element={<TemasPage />} />
+                <Route path="/" element={<SubjectsPage />} />
+                <Route path="/subjects/:subjectId" element={<UnitsPage />} />
+                <Route path="/units/:unitId" element={<TopicsPage />} />
             </Routes>
         </BrowserRouter>
     );

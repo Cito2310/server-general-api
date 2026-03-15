@@ -2,83 +2,83 @@ import { useState } from 'react';
 import { Modal } from '../../shared/components/Modal';
 import { Input } from '../../shared/components/Input';
 import { Button } from '../../shared/components/Button';
-import type { Nodo } from '../../types';
+import type { Node } from '../../types';
 
 interface Props {
-    nodo?: Nodo;
+    node?: Node;
     parentLabel?: string;
-    onSave: (label: string, contenido: string, contenidoModo: 'inline' | 'bloque') => void;
+    onSave: (label: string, content: string, contentMode: 'inline' | 'block') => void;
     onClose: () => void;
 }
 
-export const NodoForm = ({ nodo, parentLabel, onSave, onClose }: Props) => {
-    const [label, setLabel] = useState(nodo?.label ?? '');
-    const [contenido, setContenido] = useState(nodo?.contenido ?? '');
-    const [contenidoModo, setContenidoModo] = useState<'inline' | 'bloque'>(nodo?.contenidoModo ?? 'bloque');
+export const NodeForm = ({ node, parentLabel, onSave, onClose }: Props) => {
+    const [label, setLabel] = useState(node?.label ?? '');
+    const [content, setContent] = useState(node?.content ?? '');
+    const [contentMode, setContentMode] = useState<'inline' | 'block'>(node?.contentMode ?? 'block');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!label.trim()) return;
-        onSave(label.trim(), contenido.trim(), contenidoModo);
+        onSave(label.trim(), content.trim(), contentMode);
         onClose();
     };
 
-    const titulo = nodo ? 'Editar nodo' : parentLabel ? `Agregar hijo a "${parentLabel}"` : 'Nuevo nodo raíz';
+    const title = node ? 'Edit Node' : parentLabel ? `Add child to "${parentLabel}"` : 'New Root Node';
 
     return (
-        <Modal title={titulo} onClose={onClose}>
+        <Modal title={title} onClose={onClose}>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <Input
-                    label="Título"
+                    label="Title"
                     value={label}
                     onChange={e => setLabel(e.target.value)}
-                    placeholder="Ej: Definición"
+                    placeholder="E.g.: Definition"
                     autoFocus
                 />
                 <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-gray-700">Contenido <span className="text-gray-400">(opcional)</span></label>
+                    <label className="text-sm font-medium text-gray-700">Content <span className="text-gray-400">(optional)</span></label>
                     <textarea
-                        value={contenido}
-                        onChange={e => setContenido(e.target.value)}
-                        placeholder="Descripción o contenido del nodo..."
+                        value={content}
+                        onChange={e => setContent(e.target.value)}
+                        placeholder="Description or node content..."
                         rows={4}
                         className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
                     />
                 </div>
 
-                {contenido.trim() && (
+                {content.trim() && (
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-gray-700">Mostrar contenido</label>
+                        <label className="text-sm font-medium text-gray-700">Display content</label>
                         <div className="flex gap-2">
                             <button
                                 type="button"
-                                onClick={() => setContenidoModo('inline')}
+                                onClick={() => setContentMode('inline')}
                                 className={`flex-1 py-2 px-3 rounded-lg border text-sm cursor-pointer transition-colors ${
-                                    contenidoModo === 'inline'
+                                    contentMode === 'inline'
                                         ? 'border-gray-900 bg-gray-900 text-white'
                                         : 'border-gray-200 text-gray-600 hover:border-gray-300'
                                 }`}
                             >
-                                En la misma línea
+                                Inline
                             </button>
                             <button
                                 type="button"
-                                onClick={() => setContenidoModo('bloque')}
+                                onClick={() => setContentMode('block')}
                                 className={`flex-1 py-2 px-3 rounded-lg border text-sm cursor-pointer transition-colors ${
-                                    contenidoModo === 'bloque'
+                                    contentMode === 'block'
                                         ? 'border-gray-900 bg-gray-900 text-white'
                                         : 'border-gray-200 text-gray-600 hover:border-gray-300'
                                 }`}
                             >
-                                Abajo
+                                Below
                             </button>
                         </div>
                     </div>
                 )}
 
                 <div className="flex justify-end gap-2">
-                    <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
-                    <Button type="submit" disabled={!label.trim()}>Guardar</Button>
+                    <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
+                    <Button type="submit" disabled={!label.trim()}>Save</Button>
                 </div>
             </form>
         </Modal>

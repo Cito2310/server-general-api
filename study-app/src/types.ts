@@ -1,26 +1,26 @@
-export interface Materia {
+export interface Subject {
     id: string;
-    nombre: string;
+    name: string;
 }
 
-export interface Unidad {
+export interface Unit {
     id: string;
-    materiaId: string;
-    nombre: string;
+    subjectId: string;
+    name: string;
 }
 
-export interface Tema {
+export interface Topic {
     id: string;
-    unidadId: string;
-    nombre: string;
+    unitId: string;
+    name: string;
 }
 
-export interface Nodo {
+export interface Node {
     id: string;
-    temaId: string;
+    topicId: string;
     parentId: string | null;
     label: string;
-    contenido: string;
-    contenidoModo: 'inline' | 'bloque';
-    orden: number;
+    content: string;
+    contentMode: 'inline' | 'block';
+    order: number;
 }

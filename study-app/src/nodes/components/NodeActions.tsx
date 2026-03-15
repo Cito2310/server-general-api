@@ -1,0 +1,23 @@
+import { Button } from '../../shared/components/Button';
+
+interface Props {
+    onAddChild: () => void;
+    onEdit: () => void;
+    onDelete: () => void;
+}
+
+export const NodeActions = ({ onAddChild, onEdit, onDelete }: Props) => {
+    return (
+        <div className="hidden group-hover:flex items-center gap-1">
+            <Button variant="ghost" size="sm" onClick={onAddChild}>
+                + child
+            </Button>
+            <Button variant="ghost" size="sm" onClick={onEdit}>
+                Edit
+            </Button>
+            <Button variant="ghost" size="sm" onClick={onDelete}>
+                <span className="text-red-400">Delete</span>
+            </Button>
+        </div>
+    );
+};
