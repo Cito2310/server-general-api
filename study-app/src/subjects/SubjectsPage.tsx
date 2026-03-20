@@ -2,6 +2,7 @@ import { useSubjectsPage } from './hooks/useSubjectsPage';
 import { SubjectForm } from './components/SubjectForm';
 import { Button } from '../shared/components/Button';
 import { EmptyState } from '../shared/components/EmptyState';
+import { ItemActions } from '../shared/components/ItemActions';
 
 export const SubjectsPage = () => {
     const {
@@ -20,11 +21,11 @@ export const SubjectsPage = () => {
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-2xl mx-auto px-4 py-10">
                 <div className="flex items-center justify-between mb-8">
-                    <h1 className="text-2xl font-bold text-gray-900">My Subjects</h1>
-                    <Button onClick={() => setShowForm(true)}>+ New Subject</Button>
+                    <h1 className="text-2xl font-bold text-gray-900">Mis Materias</h1>
+                    <Button onClick={() => setShowForm(true)}>+ Nueva Materia</Button>
                 </div>
 
-                {subjects.length === 0 ? ( <EmptyState title="No subjects yet" subtitle="Create your first subject to get started" /> ) : (
+                {subjects.length === 0 ? ( <EmptyState title="Aún no tienes una materia" subtitle="Crea una nueva materia para empezar" /> ) : (
                     <div className="flex flex-col gap-3">
                         {subjects.map(subject => (
                             <div
@@ -37,14 +38,10 @@ export const SubjectsPage = () => {
                                 >
                                     {subject.name}
                                 </button>
-                                <div className="flex gap-1">
-                                    <Button variant="ghost" size="sm" onClick={() => handleEdit(subject)}>
-                                        Edit
-                                    </Button>
-                                    <Button variant="ghost" size="sm" onClick={() => remove(subject.id)}>
-                                        <span className="text-red-400 hover:text-red-600">Delete</span>
-                                    </Button>
-                                </div>
+                                <ItemActions
+                                    onEdit={() => handleEdit(subject)}
+                                    onDelete={() => remove(subject.id)}
+                                />
                             </div>
                         ))}
                     </div>

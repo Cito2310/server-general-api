@@ -27,7 +27,7 @@ export const useNodeForm = ({ node, parentLabel, onSave, onClose }: Options) => 
     const content = useWatch({ control, name: 'content' });
     const contentMode = useWatch({ control, name: 'contentMode' });
 
-    const title = node ? 'Edit Node' : parentLabel ? `Add child to "${parentLabel}"` : 'New Root Node';
+    const title = node ? 'Editar Nodo' : parentLabel ? `Agregar hijo a "${parentLabel}"` : 'Nuevo Nodo Raíz';
 
     const onSubmit = ({ label, content, contentMode }: NodeFormValues) => {
         onSave(label.trim(), content.trim(), contentMode);

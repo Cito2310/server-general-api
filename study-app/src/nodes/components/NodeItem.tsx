@@ -39,16 +39,16 @@ export const NodeItem = ({ node, topicId, depth = 0 }: Props) => {
                 {!hasChildren && <span className="w-2 shrink-0" />}
 
                 <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 relative">
                         <span className="font-semibold text-gray-900 text-sm">{node.label}</span>
                         {node.content && node.contentMode === 'inline' && (
                             <span className="text-gray-500 text-sm font-normal">=&gt; {node.content}</span>
                         )}
-                        <NodeActions
-                            onAddChild={() => setShowAddForm(true)}
-                            onEdit={() => setShowEditForm(true)}
-                            onDelete={handleRemove}
-                        />
+                            <NodeActions
+                                onAddChild={() => setShowAddForm(true)}
+                                onEdit={() => setShowEditForm(true)}
+                                onDelete={handleRemove}
+                            />
                     </div>
                     {node.content && node.contentMode === 'block' && (
                         <p className="text-sm text-gray-500 mt-0.5 whitespace-pre-wrap">{node.content}</p>

@@ -3,6 +3,7 @@ import { UnitForm } from './components/UnitForm';
 import { Breadcrumb } from '../shared/components/Breadcrumb';
 import { Button } from '../shared/components/Button';
 import { EmptyState } from '../shared/components/EmptyState';
+import { ItemActions } from '../shared/components/ItemActions';
 
 export const UnitsPage = () => {
     const {
@@ -18,19 +19,19 @@ export const UnitsPage = () => {
         handleNavigate,
     } = useUnitsPage();
 
-    if (!subject) return <div className="p-10 text-gray-400">Subject not found</div>;
+    if (!subject) return <div className="p-10 text-gray-400">Materia no encontrada</div>;
 
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-2xl mx-auto px-4 py-10">
-                <Breadcrumb crumbs={[{ label: 'Subjects', to: '/' }, { label: subject.name }]} />
+                <Breadcrumb crumbs={[{ label: 'Materias', to: '/' }, { label: subject.name }]} />
 
                 <div className="flex items-center justify-between mb-8">
                     <h1 className="text-2xl font-bold text-gray-900">{subject.name}</h1>
-                    <Button onClick={() => setShowForm(true)}>+ New Unit</Button>
+                    <Button onClick={() => setShowForm(true)}>+ Nueva Unidad</Button>
                 </div>
 
-                {units.length === 0 ? ( <EmptyState title="No units yet" subtitle="Create the first unit for this subject" /> ) : (
+                {units.length === 0 ? ( <EmptyState title="Aún no hay unidades" subtitle="Crea la primera unidad para esta materia" /> ) : (
                     <div className="flex flex-col gap-3">
                         {units.map(unit => (
                             <div
@@ -43,14 +44,10 @@ export const UnitsPage = () => {
                                 >
                                     {unit.name}
                                 </button>
-                                <div className="flex gap-1">
-                                    <Button variant="ghost" size="sm" onClick={() => handleEdit(unit)}>
-                                        Edit
-                                    </Button>
-                                    <Button variant="ghost" size="sm" onClick={() => remove(unit.id)}>
-                                        <span className="text-red-400 hover:text-red-600">Delete</span>
-                                    </Button>
-                                </div>
+                                <ItemActions
+                                    onEdit={() => handleEdit(unit)}
+                                    onDelete={() => remove(unit.id)}
+                                />
                             </div>
                         ))}
                     </div>

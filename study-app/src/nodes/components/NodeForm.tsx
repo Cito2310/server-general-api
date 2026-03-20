@@ -28,19 +28,19 @@ export const NodeForm = ({ node, parentLabel, onSave, onClose }: Props) => {
         <Modal title={title} onClose={onClose}>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                 <Input
-                    label="Title"
-                    placeholder="E.g.: Definition"
+                    label="Título"
+                    placeholder="Ej.: Definición"
                     autoFocus
                     {...register('label', { required: true, validate: v => !!v.trim() })}
                 />
-                {errors.label && <p className="text-red-500 text-sm">Title is required</p>}
+                {errors.label && <p className="text-red-500 text-sm">El título es requerido</p>}
 
                 <div className="flex flex-col gap-1">
                     <label className="text-sm font-medium text-gray-700">
-                        Content <span className="text-gray-400">(optional)</span>
+                        Contenido <span className="text-gray-400">(opcional)</span>
                     </label>
                     <textarea
-                        placeholder="Description or node content..."
+                        placeholder="Descripción o contenido del nodo..."
                         rows={4}
                         className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
                         {...register('content')}
@@ -49,7 +49,7 @@ export const NodeForm = ({ node, parentLabel, onSave, onClose }: Props) => {
 
                 {content.trim() && (
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm font-medium text-gray-700">Display content</label>
+                        <label className="text-sm font-medium text-gray-700">Mostrar contenido</label>
                         <div className="flex gap-2">
                             <button
                                 type="button"
@@ -60,7 +60,7 @@ export const NodeForm = ({ node, parentLabel, onSave, onClose }: Props) => {
                                         : 'border-gray-200 text-gray-600 hover:border-gray-300'
                                 }`}
                             >
-                                Inline
+                                En línea
                             </button>
                             <button
                                 type="button"
@@ -71,15 +71,15 @@ export const NodeForm = ({ node, parentLabel, onSave, onClose }: Props) => {
                                         : 'border-gray-200 text-gray-600 hover:border-gray-300'
                                 }`}
                             >
-                                Below
+                                Abajo
                             </button>
                         </div>
                     </div>
                 )}
 
                 <div className="flex justify-end gap-2">
-                    <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
-                    <Button type="submit" disabled={!isValid}>Save</Button>
+                    <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
+                    <Button type="submit" disabled={!isValid}>Guardar</Button>
                 </div>
             </form>
         </Modal>

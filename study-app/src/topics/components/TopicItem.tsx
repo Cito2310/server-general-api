@@ -1,7 +1,7 @@
 import { useTopicItem } from '../hooks/useTopicItem';
 import { NodeItem } from '../../nodes/components/NodeItem';
 import { NodeForm } from '../../nodes/components/NodeForm';
-import { TopicActions } from './TopicActions';
+import { ItemActions } from '../../shared/components/ItemActions';
 import { TopicForm } from './TopicForm';
 import type { Topic } from '../../types';
 
@@ -37,8 +37,8 @@ export const TopicItem = ({ topic, onEdit, onDelete }: Props) => {
                 </button>
 
                 <span className="flex-1 font-semibold text-gray-900">{topic.name}</span>
-                <TopicActions
-                    onAddNode={handleAddNode}
+                <ItemActions
+                    onAdd={{ label: '+ nodo', onClick: handleAddNode }}
                     onEdit={() => setShowEditForm(true)}
                     onDelete={() => onDelete(topic.id)}
                 />
@@ -55,12 +55,12 @@ export const TopicItem = ({ topic, onEdit, onDelete }: Props) => {
                         </div>
                     ) : (
                         <div className="pt-4 pb-2 text-center text-gray-400 text-sm">
-                            No content.{' '}
+                            Sin contenido.{' '}
                             <button
                                 className="underline cursor-pointer hover:text-gray-600"
                                 onClick={() => setShowAddRoot(true)}
                             >
-                                Add node
+                                Agregar nodo
                             </button>
                         </div>
                     )}

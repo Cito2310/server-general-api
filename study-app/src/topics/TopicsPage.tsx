@@ -17,23 +17,23 @@ export const TopicsPage = () => {
         handleCreate,
     } = useTopicsPage();
 
-    if (!unit) return <div className="p-10 text-gray-400">Unit not found</div>;
+    if (!unit) return <div className="p-10 text-gray-400">Unidad no encontrada</div>;
 
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="max-w-3xl mx-auto px-4 py-10">
                 <Breadcrumb crumbs={[
-                    { label: 'Subjects', to: '/' },
+                    { label: 'Materias', to: '/' },
                     { label: subject?.name ?? '...', to: `/subjects/${subject?.id}` },
                     { label: unit.name },
                 ]} />
 
                 <div className="flex items-center justify-between mb-8">
                     <h1 className="text-2xl font-bold text-gray-900">{unit.name}</h1>
-                    <Button onClick={() => setShowForm(true)}>+ New Topic</Button>
+                    <Button onClick={() => setShowForm(true)}>+ Nuevo Tema</Button>
                 </div>
 
-                {topics.length === 0 ? ( <EmptyState title="No topics yet" subtitle="Create the first topic for this unit" /> ) : (
+                {topics.length === 0 ? ( <EmptyState title="Aún no hay temas" subtitle="Crea el primer tema para esta unidad" /> ) : (
                     <div className="flex flex-col gap-3">
                         {topics.map(topic => (
                             <TopicItem

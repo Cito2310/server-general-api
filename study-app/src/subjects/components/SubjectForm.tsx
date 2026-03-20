@@ -18,18 +18,18 @@ export const SubjectForm = ({ subject, onSave, onClose }: Props) => {
     });
 
     return (
-        <Modal title={subject ? 'Edit Subject' : 'New Subject'} onClose={onClose}>
+        <Modal title={subject ? 'Editar Materia' : 'Nueva Materia'} onClose={onClose}>
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                 <Input
-                    label="Name"
-                    placeholder="E.g.: Economics"
+                    label="Nombre"
+                    placeholder="Ej.: Economía"
                     autoFocus
                     {...register('name', { required: true, validate: v => !!v.trim() })}
                 />
-                {errors.name && <p className="text-red-500 text-sm">Name is required</p>}
+                {errors.name && <p className="text-red-500 text-sm">El nombre es requerido</p>}
                 <div className="flex justify-end gap-2">
-                    <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
-                    <Button type="submit" disabled={!isValid}>Save</Button>
+                    <Button type="button" variant="secondary" onClick={onClose}>Cancelar</Button>
+                    <Button type="submit" disabled={!isValid}>Guardar</Button>
                 </div>
             </form>
         </Modal>

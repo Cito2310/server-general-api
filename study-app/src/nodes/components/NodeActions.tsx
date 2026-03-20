@@ -8,15 +8,15 @@ interface Props {
 
 export const NodeActions = ({ onAddChild, onEdit, onDelete }: Props) => {
     return (
-        <div className="hidden group-hover:flex items-center gap-1">
+        <div className="hidden group-hover:flex items-center gap-1 absolute right-0">
             <Button variant="ghost" size="sm" onClick={onAddChild}>
-                + child
+                + hijo
             </Button>
             <Button variant="ghost" size="sm" onClick={onEdit}>
-                Edit
+                Editar
             </Button>
             <Button variant="ghost" size="sm" onClick={onDelete}>
-                <span className="text-red-400">Delete</span>
+                <span className="text-red-400">Eliminar</span>
             </Button>
         </div>
     );
