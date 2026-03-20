@@ -1,7 +1,6 @@
-import { useState } from 'react';
-import { useNodes } from '../hooks/useNodes';
+import { useNodeItem } from '../hooks/useNodeItem';
 import { NodeForm } from './NodeForm';
-import { Button } from '../../shared/components/Button';
+import { NodeActions } from './NodeActions';
 import type { Node } from '../../types';
 
 interface Props {
@@ -11,43 +10,33 @@ interface Props {
 }
 
 export const NodeItem = ({ node, topicId, depth = 0 }: Props) => {
-    const { children, create, edit, remove } = useNodes();
-    const [expanded, setExpanded] = useState(true);
-    const [showAddForm, setShowAddForm] = useState(false);
-    const [showEditForm, setShowEditForm] = useState(false);
-
-    const childNodes = children(topicId, node.id);
-    const hasChildren = childNodes.length > 0;
-
-    const handleCreate = (label: string, content: string, contentMode: 'inline' | 'block') => {
-        create(topicId, node.id, label, content, contentMode);
-    };
-
-    const handleEdit = (label: string, content: string, contentMode: 'inline' | 'block') => {
-        edit(node.id, label, content, contentMode);
-    };
-
-    const indentColors = [
-        'border-gray-300',
-        'border-blue-200',
-        'border-green-200',
-        'border-purple-200',
-        'border-orange-200',
-    ];
-    const borderColor = indentColors[Math.min(depth, indentColors.length - 1)];
+    const {
+        childNodes,
+        hasChildren,
+        borderColor,
+        expanded,
+        toggleExpanded,
+        showAddForm,
+        setShowAddForm,
+        showEditForm,
+        setShowEditForm,
+        handleCreate,
+        handleEdit,
+        handleRemove,
+    } = useNodeItem(node, topicId, depth);
 
     return (
         <div className={`${depth > 0 ? `ml-5 border-l-2 ${borderColor}` : ''}`}>
             <div className="group flex items-start gap-2 py-2">
                 {hasChildren && (
                     <button
-                        onClick={() => setExpanded(v => !v)}
-                        className="mt-0.5 text-gray-400 hover:text-gray-700 cursor-pointer text-xs w-4 flex-shrink-0"
+                        onClick={toggleExpanded}
+                        className="mt-0.5 text-gray-400 hover:text-gray-700 cursor-pointer text-xs w-4 shrink-0"
                     >
                         {expanded ? '▼' : '▶'}
                     </button>
                 )}
-                {!hasChildren && <span className="w-2 flex-shrink-0" />}
+                {!hasChildren && <span className="w-2 shrink-0" />}
 
                 <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -55,17 +44,11 @@ export const NodeItem = ({ node, topicId, depth = 0 }: Props) => {
                         {node.content && node.contentMode === 'inline' && (
                             <span className="text-gray-500 text-sm font-normal">=&gt; {node.content}</span>
                         )}
-                        <div className="max-w-0 overflow-hidden group-hover:max-w-xs flex items-center gap-1 whitespace-nowrap">
-                            <Button variant="ghost" size="sm" className="py-0 group-hover:py-1.5" onClick={() => setShowAddForm(true)}>
-                                + child
-                            </Button>
-                            <Button variant="ghost" size="sm" className="py-0 group-hover:py-1.5" onClick={() => setShowEditForm(true)}>
-                                Edit
-                            </Button>
-                            <Button variant="ghost" size="sm" className="py-0 group-hover:py-1.5" onClick={() => remove(node.id)}>
-                                <span className="text-red-400">Delete</span>
-                            </Button>
-                        </div>
+                        <NodeActions
+                            onAddChild={() => setShowAddForm(true)}
+                            onEdit={() => setShowEditForm(true)}
+                            onDelete={handleRemove}
+                        />
                     </div>
                     {node.content && node.contentMode === 'block' && (
                         <p className="text-sm text-gray-500 mt-0.5 whitespace-pre-wrap">{node.content}</p>

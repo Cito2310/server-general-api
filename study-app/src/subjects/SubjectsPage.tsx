@@ -1,24 +1,20 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSubjects } from './hooks/useSubjects';
+import { useSubjectsPage } from './hooks/useSubjectsPage';
 import { SubjectForm } from './components/SubjectForm';
 import { Button } from '../shared/components/Button';
-import type { Subject } from '../types';
+import { EmptyState } from '../shared/components/EmptyState';
 
 export const SubjectsPage = () => {
-    const { subjects, create, edit, remove } = useSubjects();
-    const [showForm, setShowForm] = useState(false);
-    const [editing, setEditing] = useState<Subject | null>(null);
-    const navigate = useNavigate();
-
-    const handleSave = (name: string) => {
-        if (editing) {
-            edit(editing.id, name);
-        } else {
-            create(name);
-        }
-        setEditing(null);
-    };
+    const {
+        subjects,
+        remove,
+        showForm,
+        setShowForm,
+        editing,
+        handleSave,
+        handleEdit,
+        handleClose,
+        handleNavigate,
+    } = useSubjectsPage();
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -28,12 +24,7 @@ export const SubjectsPage = () => {
                     <Button onClick={() => setShowForm(true)}>+ New Subject</Button>
                 </div>
 
-                {subjects.length === 0 ? (
-                    <div className="text-center py-16 text-gray-400">
-                        <p className="text-lg">No subjects yet</p>
-                        <p className="text-sm mt-1">Create your first subject to get started</p>
-                    </div>
-                ) : (
+                {subjects.length === 0 ? ( <EmptyState title="No subjects yet" subtitle="Create your first subject to get started" /> ) : (
                     <div className="flex flex-col gap-3">
                         {subjects.map(subject => (
                             <div
@@ -42,23 +33,15 @@ export const SubjectsPage = () => {
                             >
                                 <button
                                     className="text-left font-medium text-gray-900 hover:text-gray-600 cursor-pointer flex-1"
-                                    onClick={() => navigate(`/subjects/${subject.id}`)}
+                                    onClick={() => handleNavigate(subject.id)}
                                 >
                                     {subject.name}
                                 </button>
                                 <div className="flex gap-1">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => setEditing(subject)}
-                                    >
+                                    <Button variant="ghost" size="sm" onClick={() => handleEdit(subject)}>
                                         Edit
                                     </Button>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => remove(subject.id)}
-                                    >
+                                    <Button variant="ghost" size="sm" onClick={() => remove(subject.id)}>
                                         <span className="text-red-400 hover:text-red-600">Delete</span>
                                     </Button>
                                 </div>
@@ -72,7 +55,7 @@ export const SubjectsPage = () => {
                 <SubjectForm
                     subject={editing ?? undefined}
                     onSave={handleSave}
-                    onClose={() => { setShowForm(false); setEditing(null); }}
+                    onClose={handleClose}
                 />
             )}
         </div>

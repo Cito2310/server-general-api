@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useNameForm } from '../../shared/hooks/useNameForm';
 import { Modal } from '../../shared/components/Modal';
 import { Input } from '../../shared/components/Input';
 import { Button } from '../../shared/components/Button';
@@ -11,28 +11,25 @@ interface Props {
 }
 
 export const UnitForm = ({ unit, onSave, onClose }: Props) => {
-    const [name, setName] = useState(unit?.name ?? '');
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!name.trim()) return;
-        onSave(name.trim());
-        onClose();
-    };
+    const { register, handleSubmit, errors, isValid, onSubmit } = useNameForm({
+        defaultName: unit?.name,
+        onSave,
+        onClose,
+    });
 
     return (
         <Modal title={unit ? 'Edit Unit' : 'New Unit'} onClose={onClose}>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                 <Input
                     label="Name"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
                     placeholder="E.g.: Unit 1 - Introduction"
                     autoFocus
+                    {...register('name', { required: true, validate: v => !!v.trim() })}
                 />
+                {errors.name && <p className="text-red-500 text-sm">Name is required</p>}
                 <div className="flex justify-end gap-2">
                     <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
-                    <Button type="submit" disabled={!name.trim()}>Save</Button>
+                    <Button type="submit" disabled={!isValid}>Save</Button>
                 </div>
             </form>
         </Modal>

@@ -1,23 +1,21 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useTopics } from './hooks/useTopics';
-import { useUnits } from '../units/hooks/useUnits';
-import { useSubjects } from '../subjects/hooks/useSubjects';
+import { useTopicsPage } from './hooks/useTopicsPage';
 import { TopicForm } from './components/TopicForm';
 import { TopicItem } from './components/TopicItem';
 import { Breadcrumb } from '../shared/components/Breadcrumb';
 import { Button } from '../shared/components/Button';
+import { EmptyState } from '../shared/components/EmptyState';
 
 export const TopicsPage = () => {
-    const { unitId } = useParams<{ unitId: string }>();
-    const { subjects } = useSubjects();
-    const { units } = useUnits();
-    const { create, edit, remove, byUnit } = useTopics();
-    const [showForm, setShowForm] = useState(false);
-
-    const unit = units.find(u => u.id === unitId);
-    const subject = subjects.find(s => s.id === unit?.subjectId);
-    const topics = byUnit(unitId!);
+    const {
+        unit,
+        subject,
+        topics,
+        edit,
+        remove,
+        showForm,
+        setShowForm,
+        handleCreate,
+    } = useTopicsPage();
 
     if (!unit) return <div className="p-10 text-gray-400">Unit not found</div>;
 
@@ -35,12 +33,7 @@ export const TopicsPage = () => {
                     <Button onClick={() => setShowForm(true)}>+ New Topic</Button>
                 </div>
 
-                {topics.length === 0 ? (
-                    <div className="text-center py-16 text-gray-400">
-                        <p className="text-lg">No topics yet</p>
-                        <p className="text-sm mt-1">Create the first topic for this unit</p>
-                    </div>
-                ) : (
+                {topics.length === 0 ? ( <EmptyState title="No topics yet" subtitle="Create the first topic for this unit" /> ) : (
                     <div className="flex flex-col gap-3">
                         {topics.map(topic => (
                             <TopicItem
@@ -56,7 +49,7 @@ export const TopicsPage = () => {
 
             {showForm && (
                 <TopicForm
-                    onSave={(name) => { create(unitId!, name); setShowForm(false); }}
+                    onSave={handleCreate}
                     onClose={() => setShowForm(false)}
                 />
             )}

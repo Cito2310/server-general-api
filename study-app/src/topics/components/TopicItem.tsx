@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useNodes } from '../../nodes/hooks/useNodes';
+import { useTopicItem } from '../hooks/useTopicItem';
 import { NodeItem } from '../../nodes/components/NodeItem';
 import { NodeForm } from '../../nodes/components/NodeForm';
 import { TopicActions } from './TopicActions';
@@ -13,26 +12,25 @@ interface Props {
 }
 
 export const TopicItem = ({ topic, onEdit, onDelete }: Props) => {
-    const { children, create } = useNodes();
-    const [expanded, setExpanded] = useState(false);
-    const [showAddRoot, setShowAddRoot] = useState(false);
-    const [showEditForm, setShowEditForm] = useState(false);
-
-    const rootNodes = children(topic.id, null);
-    const hasNodes = rootNodes.length > 0;
-
-    const handleCreateRoot = (label: string, content: string, contentMode: 'inline' | 'block') => {
-        create(topic.id, null, label, content, contentMode);
-        setExpanded(true);
-        setShowAddRoot(false);
-    };
+    const {
+        rootNodes,
+        hasNodes,
+        expanded,
+        toggleExpanded,
+        showAddRoot,
+        setShowAddRoot,
+        showEditForm,
+        setShowEditForm,
+        handleCreateRoot,
+        handleAddNode,
+    } = useTopicItem(topic);
 
     return (
         <div className="bg-white border border-gray-200 rounded-xl">
             {/* Topic header */}
             <div className="group flex items-center gap-2 px-5 py-4">
                 <button
-                    onClick={() => setExpanded(v => !v)}
+                    onClick={toggleExpanded}
                     className="text-gray-400 hover:text-gray-700 cursor-pointer text-xs w-4 shrink-0"
                 >
                     {expanded ? '▼' : '▶'}
@@ -40,7 +38,7 @@ export const TopicItem = ({ topic, onEdit, onDelete }: Props) => {
 
                 <span className="flex-1 font-semibold text-gray-900">{topic.name}</span>
                 <TopicActions
-                    onAddNode={() => { setShowAddRoot(true); setExpanded(true); }}
+                    onAddNode={handleAddNode}
                     onEdit={() => setShowEditForm(true)}
                     onDelete={() => onDelete(topic.id)}
                 />

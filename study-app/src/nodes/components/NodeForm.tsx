@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useNodeForm } from '../hooks/useNodeForm';
 import { Modal } from '../../shared/components/Modal';
 import { Input } from '../../shared/components/Input';
 import { Button } from '../../shared/components/Button';
@@ -12,37 +12,38 @@ interface Props {
 }
 
 export const NodeForm = ({ node, parentLabel, onSave, onClose }: Props) => {
-    const [label, setLabel] = useState(node?.label ?? '');
-    const [content, setContent] = useState(node?.content ?? '');
-    const [contentMode, setContentMode] = useState<'inline' | 'block'>(node?.contentMode ?? 'block');
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!label.trim()) return;
-        onSave(label.trim(), content.trim(), contentMode);
-        onClose();
-    };
-
-    const title = node ? 'Edit Node' : parentLabel ? `Add child to "${parentLabel}"` : 'New Root Node';
+    const {
+        register,
+        handleSubmit,
+        errors,
+        isValid,
+        content,
+        contentMode,
+        title,
+        onSubmit,
+        setContentMode,
+    } = useNodeForm({ node, parentLabel, onSave, onClose });
 
     return (
         <Modal title={title} onClose={onClose}>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
                 <Input
                     label="Title"
-                    value={label}
-                    onChange={e => setLabel(e.target.value)}
                     placeholder="E.g.: Definition"
                     autoFocus
+                    {...register('label', { required: true, validate: v => !!v.trim() })}
                 />
+                {errors.label && <p className="text-red-500 text-sm">Title is required</p>}
+
                 <div className="flex flex-col gap-1">
-                    <label className="text-sm font-medium text-gray-700">Content <span className="text-gray-400">(optional)</span></label>
+                    <label className="text-sm font-medium text-gray-700">
+                        Content <span className="text-gray-400">(optional)</span>
+                    </label>
                     <textarea
-                        value={content}
-                        onChange={e => setContent(e.target.value)}
                         placeholder="Description or node content..."
                         rows={4}
                         className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
+                        {...register('content')}
                     />
                 </div>
 
@@ -78,7 +79,7 @@ export const NodeForm = ({ node, parentLabel, onSave, onClose }: Props) => {
 
                 <div className="flex justify-end gap-2">
                     <Button type="button" variant="secondary" onClick={onClose}>Cancel</Button>
-                    <Button type="submit" disabled={!label.trim()}>Save</Button>
+                    <Button type="submit" disabled={!isValid}>Save</Button>
                 </div>
             </form>
         </Modal>
